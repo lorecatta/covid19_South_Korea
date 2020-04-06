@@ -98,8 +98,7 @@ p_cum <- ggplot(data = df_cum_long, aes(x = date, y = value)) +
         axis.title.x = element_blank())
 
 p_inc <- ggplot(data = df_inc_long, aes(x = date, y = value)) +
-  geom_line() + 
-  geom_point(size = 0.7) +
+  geom_col(width = 0.7) + 
   facet_wrap(~ type, ncol = 1, scales = "free_y") +
   scale_x_date(breaks = brks, date_labels = "%b %d") +
   scale_y_continuous("Daily number") +
