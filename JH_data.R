@@ -21,10 +21,22 @@ recovered <- read.csv(file.path("data",
                                 "time_series_covid19_recovered_global.csv"))
 
 
-# run -------------------------------------------------------------------------
+# define parameters -----------------------------------------------------------
 
 
 country_name <- "Korea, South"
+
+brks_labs <- c("2020-01-22", 
+               "2020-02-01", 
+               "2020-02-15", 
+               "2020-02-15", 
+               "2020-03-01", 
+               "2020-03-15", 
+               "2020-04-01")
+
+
+# run -------------------------------------------------------------------------
+
 
 death_sub <- subset(death, Country.Region %in% country_name)
 death_cum <- as.numeric(death_sub[1,5:ncol(death_sub)])
@@ -68,6 +80,8 @@ df_inc_long <- melt(df_inc_wide,
 df_inc_long$date <- paste0(df_inc_long$date, "20")
 df_inc_long$date <- as.Date(df_inc_long$date, '%m.%d.%Y')
 
+brks <- as.Date(brks_labs)
+
 
 # plotting --------------------------------------------------------------------
 
@@ -76,8 +90,8 @@ p_cum <- ggplot(data = df_cum_long, aes(x = date, y = value)) +
   geom_line() + 
   geom_point(size = 0.7) +
   facet_wrap(~ type, ncol = 1, scales = "free_y") +
-  scale_x_date() +
-  scale_y_continuous("Number") +
+  scale_x_date(breaks = brks, date_labels = "%b %d") +
+  scale_y_continuous("Cumulative number") +
   ggtitle("South Korea") +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
@@ -87,8 +101,8 @@ p_inc <- ggplot(data = df_inc_long, aes(x = date, y = value)) +
   geom_line() + 
   geom_point(size = 0.7) +
   facet_wrap(~ type, ncol = 1, scales = "free_y") +
-  scale_x_date() +
-  scale_y_continuous("Number") +
+  scale_x_date(breaks = brks, date_labels = "%b %d") +
+  scale_y_continuous("Daily number") +
   ggtitle("South Korea") +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
