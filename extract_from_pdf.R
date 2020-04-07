@@ -1,7 +1,6 @@
 
 library(purrr)
 library(tabulizer)
-library(dplyr)
 
 source(file.path("R", "pdf_extraction_functions.R"))
 
@@ -38,5 +37,6 @@ imap(urls, ~ download.file(url = .x, destfile = dest_files[.y], mode = "wb"))
 # load pdfs into R
 my_pdfs <- map(dest_files, ~ extract_tables(file = .x))
 
-# extract from pdf four tables 
-tables_report_1 <- scrap_tables(my_pdfs[[4]])
+# extract four tables from each pdf 
+# unfortuntely this only works ATM for report in position 4 
+scrap_tables(my_pdfs[[4]])
