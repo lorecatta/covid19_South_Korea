@@ -1,6 +1,7 @@
 
 library(purrr)
 library(tabulizer)
+library(dplyr)
 
 source(file.path("R", "pdf_extraction_functions.R"))
 
@@ -23,10 +24,4 @@ imap(urls, ~ download.file(url = .x, destfile = dest_files[.y], mode = "wb"))
 # extract from pdf four tables 
 my_pdf <- extract_tables("report_1.pdf")
 
-# total confirmed and suspected cases 
-table_1 <- format_table_1(my_pdf)
-
-# imported cases 
-table_2 <- format_table_2(my_pdf) 
-
-# epi cluster tables
+tables_report_1 <- scrap_tables(my_pdf)
