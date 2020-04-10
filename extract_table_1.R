@@ -70,8 +70,8 @@ all_pdfs_3 <- imap(target_3, ~ pdf_text(pdf = .x))
 all_tables_3 <- imap(all_pdfs_3, ~ grab_table_1_oneRow(test_1 = .x, 
                                                        index = .y))
 
-grab_table_1_oneRow(all_pdfs_3[[3]],
-                    index = 3)
+# grab_table_1_oneRow(all_pdfs_3[[3]],
+#                     index = 3)
 
 
 # -----------------------------------------------------------------------------
