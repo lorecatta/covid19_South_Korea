@@ -71,13 +71,43 @@ all_repors_2 <- all_reports[all_dates_order_I_want]
 
 all_reports_2_df <- do.call("rbind", all_repors_2)
 
-manual_2 <- manual[nrow(manual):1,]
-manual_dates <- as.Date(manual_2$Date, "%d/%m/%Y")
+manual_dates <- as.Date(manual$Date, "%d/%m/%Y")
 
-final_output <- rbind(manual_2[,-1], all_reports_2_df)
+final_output <- rbind(manual[,-1], all_reports_2_df)
 
 final_output_2 <- subset(final_output, Period == 2)
 
 final_output_2$Date <- c(manual_dates, all_dates_current_order[all_dates_order_I_want])
+
+
+# -----------------------------------------------------------------------------
+# linear interpolation of NA Being tested
+
+
+na_idxs <- which(is.na(final_output_2$Being_tested))
+
+my_look_up_table <- data.frame(Confirmed = final_output_2$Confirmed[-na_idxs],
+                               Total = final_output_2$Total[-na_idxs],
+                               Being_tested = final_output_2$Being_tested[-na_idxs],
+                               stringsAsFactors = FALSE)
+
+values_to_look_up <- final_output_2$Confirmed[na_idxs]
+
+Being_tested_vals <- approx(my_look_up_table[, "Confirmed"], 
+                            my_look_up_table[, "Being_tested"], 
+                            xout = values_to_look_up)$y
+
+final_output_2$Being_tested[na_idxs] <- round(Being_tested_vals)
+
+# interpolate Total as well. Otherwise how do I get the number of negative tested?
+
+Total_vals <- approx(my_look_up_table[, "Confirmed"], 
+                     my_look_up_table[, "Total"], 
+                     xout = values_to_look_up)$y
+
+final_output_2$Total[na_idxs] <- round(Total_vals)
+
+# now calculate the number of tested negative
+final_output_2$Tested_negative <- final_output_2$Total - (final_output_2$Confirmed + final_output_2$Being_tested)
 
 write_out_csv(final_output_2, "output", "KCDC_line_list")
