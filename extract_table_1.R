@@ -6,7 +6,13 @@ library(purrr)
 source(file.path("R", "pdf_extraction_functions.R"))
 source(file.path("R", "utility_functions.R"))
 
+
+# define parameters -----------------------------------------------------------
+
+
 dir_in <- file.path("data", "korea_archive")
+
+last_day <- "2020-04-16"
 
 
 # preprocess ------------------------------------------------------------------
@@ -25,7 +31,7 @@ all_paths <- list.files(file.path(dir_in), full.names = TRUE)
 
 
 target_1_dates <- c(as.Date(c("2020-03-10", "2020-03-12", "2020-03-14")),
-                    seq(as.Date("2020-03-18"), as.Date("2020-04-07"), 1))
+                    seq(as.Date("2020-03-18"), as.Date(last_day), 1))
 
 target_1_idx <- which(all_pdf_dates %in% target_1_dates)
 
@@ -35,7 +41,7 @@ all_pdfs_1 <- imap(target_1, ~ pdf_text(pdf = .x))
 
 all_tables_1 <- imap(all_pdfs_1, ~ grab_table_1(test_1 = .x, index = .y))
 
-# grab_table_1(all_pdfs_1[[4]], index = 4)
+grab_table_1(all_pdfs_1[[33]], index = 33)
 
 
 # -----------------------------------------------------------------------------
@@ -96,6 +102,14 @@ all_tables_4 <- imap(all_pdfs_4, ~ grab_table_1_oneDate(test_1 = .x,
 #                      index = 2)
 
 
+# concatenate all dates together ----------------------------------------------
+
+
+all_target_dates <- c(target_1_dates,
+                      target_2_dates,
+                      target_3_dates,
+                      target_4_dates)
+
 # save ------------------------------------------------------------------------
 
 
@@ -103,3 +117,5 @@ write_out_rds(all_tables_1, "output", "all_tables_1")
 write_out_rds(all_tables_2, "output", "all_tables_2")
 write_out_rds(all_tables_3, "output", "all_tables_3")
 write_out_rds(all_tables_4, "output", "all_tables_4")
+
+write_out_rds(all_target_dates, "output", "all_target_dates")
