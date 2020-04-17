@@ -19,7 +19,7 @@ grab_table_1 <- function(test_1, index) {
   
   spl_4 <- strsplit(table_1[idx_1], "\\|")
   
-  if(spl_4[[1]][2] == "total") {
+  if(spl_4[[1]][2] == "total" | spl_4[[1]][2] == "isolation isolation") {
     
     idx_1 <- idx_1 + 2
     idx_2 <- idx_2 + 2
