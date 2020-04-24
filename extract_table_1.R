@@ -41,7 +41,7 @@ all_pdfs_1 <- imap(target_1, ~ pdf_text(pdf = .x))
 
 all_tables_1 <- imap(all_pdfs_1, ~ grab_table_1(test_1 = .x, index = .y))
 
-grab_table_1(all_pdfs_1[[33]], index = 33)
+# grab_table_1(all_pdfs_1[[33]], index = 33)
 
 
 # -----------------------------------------------------------------------------
