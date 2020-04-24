@@ -75,7 +75,7 @@ fill_fields_3 <- function(x) {
 
 add_num_time <- function(x) {
   
-  if(is.matrix(x)){
+  if(!is.null(dim(x))){
     
     out <- cbind(Period = c(1, 2), x)
     
