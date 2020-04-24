@@ -23,7 +23,7 @@ manual <- read.csv(file.path("data", "manual.csv"), stringsAsFactors = FALSE)
 # -----------------------------------------------------------------------------
 
 
-all_tables_1_num <- lapply(all_tables_1, char_to_num)
+all_tables_1_num <- all_tables_1
 all_tables_2_num <- lapply(all_tables_2, char_to_num)
 all_tables_3_num <- lapply(all_tables_3, char_to_num)
 all_tables_4_num <- lapply(all_tables_4, char_to_num)
