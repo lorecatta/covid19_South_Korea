@@ -24,16 +24,24 @@ grab_table_1 <- function(test_1, index) {
   table_1 <- str_replace_all(table_1, ",", "")
   table_1 <- str_replace_all(table_1, "\r$", "")
   
-  #browser()
+  # browser()
   
   # alternative - more general?
+  end <- 8
+  
+  if(index == 1 | index == 2) {
+    
+    end <- 9
+    
+  }
+  
   test <- lapply(table_1, str_split, "\\|", simplify = TRUE)
   test_2 <- vapply(test, number_finder, logical(1))
   test_3 <- table_1[test_2]
   spl_1 <- str_split(test_3[1], "\\|")
   spl_2 <- str_split(test_3[2], "\\|")
-  test_3[1] <- str_c(spl_1[[1]][1:8], collapse = "|")
-  test_3[2] <- str_c(spl_2[[1]][1:8], collapse = "|")
+  test_3[1] <- str_c(spl_1[[1]][1:end], collapse = "|")
+  test_3[2] <- str_c(spl_2[[1]][1:end], collapse = "|")
   text_con <- textConnection(test_3)
   
   # idx_1 <- 4
