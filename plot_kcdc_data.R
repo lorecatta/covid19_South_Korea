@@ -98,7 +98,7 @@ SK_case_plot <- ggplot(data = case_data_2) +
         axis.ticks.x.bottom = element_blank(),
         plot.margin = unit(c(0,1,0,0.5), "cm"),
         legend.position = c(0.83, 0.5),
-        legend.background = element_rect(fill = "gray80", colour = "black"),
+        legend.background = element_rect(fill = "gray90", colour = "black"),
         legend.key = element_rect(fill = "transparent")) +
   labs(tags = "A")
 
