@@ -57,9 +57,9 @@ all_reports <- c(all_tables_1_num_final,
                  all_tables_3_num_final,
                  all_tables_4_num_final)
 
-all_repors_2 <- all_reports[all_dates_order_I_want]
+all_reports_2 <- all_reports[all_dates_order_I_want]
 
-all_reports_2_df <- as.data.frame(do.call("rbind", all_repors_2))
+all_reports_2_df <- as.data.frame(do.call("rbind", all_reports_2))
 
 manual_dates <- as.Date(manual$Date, "%d/%m/%Y")
 
