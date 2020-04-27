@@ -43,33 +43,7 @@ grab_table_1 <- function(test_1, index) {
   test_3[1] <- str_c(spl_1[[1]][1:end], collapse = "|")
   test_3[2] <- str_c(spl_2[[1]][1:end], collapse = "|")
   text_con <- textConnection(test_3)
-  
-  # idx_1 <- 4
-  # idx_2 <- 7
-  # 
-  # spl_4 <- strsplit(table_1[idx_1], "\\|")
-  # 
-  # if(spl_4[[1]][2] == "total" | spl_4[[1]][2] == "isolation isolation") {
-  # 
-  #   idx_1 <- idx_1 + 2
-  #   idx_2 <- idx_2 + 2
-  #   spl_4 <- strsplit(table_1[idx_1], "\\|")
-  # 
-  # }
-  # 
-  # spl_7 <- strsplit(table_1[idx_2], "\\|")
-  # l_spl_4 <- length(spl_4[[1]])
-  # l_spl_7 <- length(spl_7[[1]])
-  # if(l_spl_4 == 17) {
-  #   spl_4[[1]] <- spl_4[[1]][1:8]
-  #   table_1[idx_1] <- str_c(spl_4[[1]], collapse = "|")
-  # }
-  # if(l_spl_7 == 9 & l_spl_4 == 8) {
-  #   spl_7[[1]] <- spl_7[[1]][-length(spl_7[[1]])]
-  #   table_1[idx_2] <- str_c(spl_7[[1]], collapse = "|")
-  # }
-  # text_con <- textConnection(table_1[c(idx_1, idx_2)])
-  
+
   data_table <- read.csv(text_con, sep = "|", header = FALSE, stringsAsFactors = FALSE)
   
   if(is.na(data_table[1, 1])) { 
@@ -87,9 +61,7 @@ grab_table_1 <- function(test_1, index) {
   col_names <- c("Total", "Confirmed", "Discharged", "Isolated", "Deceased", "Being_tested", "Tested_negative")
   
   setNames(ret, col_names)
-  
-  #data.frame(lapply(out, as.character), stringsAsFactors = FALSE)
-  
+
 }
 
 grab_table_1_byCityProvince <- function(test_1, index) {
