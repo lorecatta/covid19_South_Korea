@@ -43,7 +43,7 @@ case_data_2 <- case_data %>%
   mutate_at(.funs = list(inc = ~. - lag(., default = first(.))), 
             .vars = c("Total", "Confirmed", "Discharged", "Deceased"))
             
-sec_axis_brks <- seq(0, 500000, 100000)
+sec_axis_brks <- seq(0, 600000, 100000)
 
 sec_axis_labels <- vapply(sec_axis_brks, 
                           scientific_format, 
