@@ -12,7 +12,7 @@ source(file.path("R", "utility_functions.R"))
 
 dir_in <- file.path("data", "korea_archive")
 
-last_day <- "2020-04-24"
+last_day <- "2020-04-28"
 
 
 # preprocess ------------------------------------------------------------------
