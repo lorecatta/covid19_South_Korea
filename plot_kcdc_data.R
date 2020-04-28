@@ -171,8 +171,8 @@ isolation_plot <- ggplot(data = case_data_3) +
 # save ------------------------------------------------------------------------
 
 
-save_plot(SK_total_plot, "figures", "test_data", wdt = 17, hgt = 7)
+save_plot(SK_total_plot, "figures", "test_data", wdt = 18, hgt = 7)
 
-save_plot(g, "figures", "korea_case_data_v1", wdt = 17, hgt = 15)
+save_plot(g, "figures", "korea_case_data_v1", wdt = 18, hgt = 15)
 
-save_plot(isolation_plot, "figures", "korea_isolation_data", wdt = 17, hgt = 7)
+save_plot(isolation_plot, "figures", "korea_isolation_data", wdt = 18, hgt = 7)
