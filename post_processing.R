@@ -100,5 +100,5 @@ final_output$Total[na_idxs] <- round(Total_vals)
 # now calculate the number of tested negative
 final_output$Tested_negative <- final_output$Total - (final_output$Confirmed + final_output$Being_tested)
 
-write_out_rds(final_output, "output", "KCDC_line_list")
-write_out_csv(final_output, "output", "KCDC_line_list")
+write_out_rds(final_output, "output", "KCDC_case_data")
+write_out_csv(final_output, "output", "KCDC_case_data")
