@@ -44,13 +44,6 @@ case_data_2 <- case_data %>%
   mutate_at(.funs = list(inc = ~. - lag(., default = first(.))), 
             .vars = c("Total", "Confirmed", "Discharged", "Deceased"))
 
-sec_axis_brks <- seq(0, 500000, 100000)
-
-sec_axis_labels <- vapply(sec_axis_brks, 
-                          scientific_format, 
-                          character(1),
-                          FALSE)
-
 key_date <- data.frame(x = as.Date(c("2020-01-28", "2020-02-20", "2020-02-23", "2020-03-22")), 
                        xend = as.Date(c("2020-01-28", "2020-02-20", "2020-02-23", "2020-03-22")),
                        y = 0,
