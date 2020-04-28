@@ -104,4 +104,4 @@ g <- SK_case_plot / SK_deaths_plot & theme(legend.position = "top")
 
 g2 <- g + plot_layout(guides = "collect")
 
-save_plot(g2, "figures", "korea_case_data_v2", wdt = 17, hgt = 16)
+save_plot(g2, "figures", "korea_case_data_v2", wdt = 18, hgt = 16)
