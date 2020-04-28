@@ -54,7 +54,6 @@ sec_axis_labels <- vapply(sec_axis_brks,
 key_date <- data.frame(x = as.Date(c("2020-01-28", "2020-02-20", "2020-02-23", "2020-03-22")), 
                        xend = as.Date(c("2020-01-28", "2020-02-20", "2020-02-23", "2020-03-22")),
                        y = 0,
-                       yend = 950,
                        lab = factor(c("Testing travellers\nfrom China", 
                                       "Testing regardless\nof travel history", 
                                       "Daegu quarantine", 
@@ -64,27 +63,17 @@ key_date <- data.frame(x = as.Date(c("2020-01-28", "2020-02-20", "2020-02-23", "
                                                "Daegu quarantine", 
                                                "Strict Social\nDistancing")))
 
-points <- data.frame(x = as.Date(c("2020-01-28", "2020-02-20", "2020-02-23", "2020-03-22")), 
-                     y = 950,
-                     lab = factor(c("Testing travellers\nfrom China", 
-                                    "Testing regardless\nof travel history", 
-                                    "Daegu quarantine", 
-                                    "Strict Social\nDistancing"), 
-                                  levels = c("Testing travellers\nfrom China", 
-                                             "Testing regardless\nof travel history", 
-                                             "Daegu quarantine", 
-                                             "Strict Social\nDistancing")))
-
 SK_case_plot <- ggplot(data = case_data_2) +
   geom_col(aes(x = Date, y = Confirmed_inc), width = 0.7, fill = "gray65") + 
   geom_line(aes(x = Date, y = Confirmed/10)) + 
   geom_segment(data = key_date, 
-               mapping = aes(x = x, y = y, xend = xend, yend = yend, linetype = lab)) +
+               mapping = aes(x = x, y = y, xend = xend, yend = 950, linetype = lab),
+               size = 0.5) +
   scale_linetype_manual(NULL,
                         values = c("Testing travellers\nfrom China" = 2, 
                                    "Testing regardless\nof travel history" = 3, 
                                    "Daegu quarantine" = 4, 
-                                   "Strict Social\nDistancing" = 5)) +
+                                   "Strict Social\nDistancing" = 6)) +
   scale_x_date(breaks = brks, date_labels = "%b %d") +
   scale_y_continuous(name = "Daily incidence", 
                      sec.axis = sec_axis(trans = ~.*10, 
@@ -100,6 +89,14 @@ SK_case_plot <- ggplot(data = case_data_2) +
 SK_deaths_plot <- ggplot(data = case_data_2) +
   geom_col(aes(x = Date, y = Deceased_inc), width = 0.7, fill = "gray65") + 
   geom_line(aes(x = Date, y = Deceased/20)) + 
+  geom_segment(data = key_date, 
+               mapping = aes(x = x, y = y, xend = xend, yend = 11, linetype = lab),
+               size = 0.5) +
+  scale_linetype_manual(NULL,
+                        values = c("Testing travellers\nfrom China" = 2, 
+                                   "Testing regardless\nof travel history" = 3, 
+                                   "Daegu quarantine" = 4, 
+                                   "Strict Social\nDistancing" = 6)) +
   scale_x_date(breaks = brks, date_labels = "%b %d") +
   scale_y_continuous(name = "Daily incidence", 
                      sec.axis = sec_axis(trans = ~.*20, 
@@ -110,6 +107,8 @@ SK_deaths_plot <- ggplot(data = case_data_2) +
         plot.margin = unit(c(0,1,0.1,0.5), "cm")) +
   labs(tags = "B")
 
-g <- SK_case_plot / SK_deaths_plot
+g <- SK_case_plot / SK_deaths_plot & theme(legend.position = "top")
 
-save_plot(g, "figures", "korea_case_data_v2", wdt = 17, hgt = 15)
+g2 <- g + plot_layout(guides = "collect")
+
+save_plot(g2, "figures", "korea_case_data_v2", wdt = 17, hgt = 16)
