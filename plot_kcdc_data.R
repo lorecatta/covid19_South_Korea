@@ -19,13 +19,13 @@ brks_labs <- c("2020-01-20",
                "2020-03-15", 
                "2020-04-01",
                "2020-04-15",
-               "2020-04-24")
+               "2020-04-28")
 
 
 # load data -------------------------------------------------------------------
 
 
-case_data <- readRDS(file.path("output", "KCDC_line_list.rds"))
+case_data <- readRDS(file.path("output", "KCDC_case_data.rds"))
 
 
 # pre processing --------------------------------------------------------------
