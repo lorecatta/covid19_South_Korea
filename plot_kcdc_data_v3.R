@@ -50,13 +50,6 @@ case_data_2 <- case_data %>%
   mutate_at(.funs = list(inc = ~. - lag(., default = first(.))),
             .vars = c("Total", "Confirmed", "Discharged", "Deceased"))
 
-sec_axis_brks <- seq(0, 600000, 100000)
-
-sec_axis_labels <- vapply(sec_axis_brks,
-                          scientific_format,
-                          character(1),
-                          FALSE)
-
 # phases are intensity levels 
 # could there be two consecutive time periods with same phases?
 Bord_contr_dates <- data.frame(type = "Border_control",
@@ -134,64 +127,9 @@ SK_case_plot <- ggplot() +
         axis.title.x = element_blank(),
         plot.margin = unit(c(0,1,0,0.5), "cm"),
         legend.position = "bottom")
-  # labs(tags = "A")
-
-# SK_deaths_plot <- ggplot(data = case_data_2) +
-#   geom_col(aes(x = Date, y = Deceased_inc), width = 0.7, fill = "gray65") +
-#   geom_line(aes(x = Date, y = Deceased/20)) +
-#   scale_x_date(breaks = brks, date_labels = "%b %d") +
-#   scale_y_continuous(name = "Daily incidence",
-#                      sec.axis = sec_axis(trans = ~.*20,
-#                                          name = "Cumulative")) +
-#   theme_bw() +
-#   theme(axis.text.x = element_text(angle = 45, hjust = 1),
-#         axis.title.x = element_blank(),
-#         plot.margin = unit(c(0,1,0.1,0.5), "cm")) +
-#   labs(tags = "B")
-# 
-# g1 <- ggplotGrob(SK_case_plot)
-# g2 <- ggplotGrob(SK_deaths_plot)
-# 
-# g <- rbind(g1, g2, size = "first")
-# 
-# g$widths <- unit.pmax(g1$widths, g2$widths)
 
 
-# isolation plot --------------------------------------------------------------
+# save ------------------------------------------------------------------------
 
 
-# case_data_3 <- case_data %>%
-#   mutate(Isolated_cum = cumsum(Isolated)) %>%
-#   mutate(Isolated_inc = Isolated_cum - lag(Isolated_cum, default = first(Isolated_cum))) %>%
-#   mutate(Confirmed_bw = Confirmed - lag(Confirmed, n = 14, default = 0)) %>%
-#   mutate(Isolation_case = Isolated_inc / Confirmed_bw)
-# 
-# isolation_plot <- ggplot(data = case_data_3) +
-#   geom_col(aes(x = Date, y = Isolation_case), width = 0.7) +
-#   # scale_fill_manual(values = c("Confirmed" = "firebrick1",
-#   #                              "Discharged" = "steelblue3")) +
-#   geom_line(aes(x = Date, y = Isolated, color = "Under isolation")) +
-#   scale_x_date(breaks = brks, date_labels = "%b %d") +
-#   scale_y_continuous(name = "Daily incidence", 
-#                      sec.axis = sec_axis(trans = ~.*25,
-#                                          name = "Cumulative",
-#                                          breaks = sec_axis_brks,
-#                                          labels = sec_axis_labels)) +
-#   scale_color_manual(name = NULL, values = c("Under isolation" = "black")) +
-#   theme_bw() +
-#   theme(axis.text.x = element_text(angle = 45, hjust = 1),
-#         axis.title.x = element_blank(),
-#         axis.title.y = element_blank(),
-#         plot.margin = unit(c(0,1,0,0.5), "cm"),
-#         legend.position = c(0.2, 0.7),
-#         legend.title = element_blank())
-# 
-# 
-# # save ------------------------------------------------------------------------
-# 
-# 
 save_plot(SK_case_plot, "figures", "timeline", wdt = 18, hgt = 8)
-# 
-# save_plot(g, "figures", "korea_case_data_v1", wdt = 18, hgt = 15)
-# 
-# save_plot(isolation_plot, "figures", "korea_isolation_data", wdt = 18, hgt = 7)
