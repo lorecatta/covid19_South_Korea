@@ -96,14 +96,13 @@ SK_deaths_plot <- ggplot(data = case_data_2) +
                      sec.axis = sec_axis(trans = ~.*20, 
                                          name = "Cumulative")) +
   theme_bw() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        axis.title.x = element_blank(),
+  theme(axis.title.x = element_blank(),
         plot.margin = unit(c(0,1,0.1,0.5), "cm")) +
   ggtitle("Deaths") +
   labs(tags = "B")
 
-g <- SK_case_plot / SK_deaths_plot & theme(legend.position = "bottom")
+g <- SK_case_plot / SK_deaths_plot & theme(legend.position = "top")
 
 g2 <- g + plot_layout(guides = "collect")
 
-save_plot(g2, "figures", "korea_case_data_v2", wdt = 18, hgt = 16)
+save_plot(g2, "figures", "korea_case_data_v3", wdt = 18, hgt = 16)
