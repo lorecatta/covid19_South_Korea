@@ -1,10 +1,10 @@
 
 library(ggplot2)
-library(grid)
-library(gridExtra)
+#library(grid)
+#library(gridExtra)
 library(dplyr)
-library(tidyr)
-library(patchwork)
+#library(tidyr)
+#library(patchwork)
 
 source(file.path("R", "utility_functions.R"))
 source(file.path("R", "plotting.R"))
@@ -12,15 +12,6 @@ source(file.path("R", "plotting.R"))
 
 # define parameters -----------------------------------------------------------
 
-
-# brks_labs <- c("2020-01-20", 
-#                "2020-02-01", 
-#                "2020-02-15", 
-#                "2020-03-01", 
-#                "2020-03-15", 
-#                "2020-04-01",
-#                "2020-04-15",
-#                "2020-04-28")
 
 brks_labs <- seq(as.Date("2020-01-02"), as.Date("2020-04-28"), by = 3)
 
@@ -53,30 +44,56 @@ case_data_2 <- case_data %>%
   mutate_at(.funs = list(inc = ~. - lag(., default = first(.))), 
             .vars = c("Total", "Confirmed", "Discharged", "Deceased"))
 
-key_date <- data.frame(x = as.Date(c("2020-01-28", "2020-02-20", "2020-02-23", "2020-03-22")), 
-                       xend = as.Date(c("2020-01-28", "2020-02-20", "2020-02-23", "2020-03-22")),
-                       y = 0,
-                       lab = factor(c("Testing travellers\nfrom China", 
-                                      "Testing regardless\nof travel history", 
-                                      "Daegu quarantine", 
-                                      "Strict Social\nDistancing"), 
-                                    levels = c("Testing travellers\nfrom China", 
-                                               "Testing regardless\nof travel history", 
-                                               "Daegu quarantine", 
-                                               "Strict Social\nDistancing")))
-
 SK_case_plot <- ggplot(data = case_data_2) +
   geom_col(aes(x = Date, y = Confirmed_inc), width = 0.7, fill = "gray65") + 
-  scale_x_date(limits = as.Date(c("2020-01-01", "2020-04-29")), breaks = brks, date_labels = "%e", expand = expansion(add = 1)) +
+  scale_x_date(limits = as.Date(c("2020-01-01", "2020-04-29")), 
+               breaks = brks, 
+               date_labels = "%e", 
+               expand = expansion(add = 1)) +
   scale_y_continuous(name = "Daily incidence",
                      breaks = prim_axis_brks,
                      labels = prim_axis_labels,
-                     limits = c(0,1000),
+                     limits = c(0, 1000),
                      expand = c(0, 0)) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 0, hjust = 0.5),
         axis.title.x = element_blank(),
-        plot.margin = unit(c(0.5,0.5,0.5,0.5), "cm"))
+        plot.margin = unit(c(0.5, 0.5, 0.5, 0.5), "cm"))
+
+
+# isolation plot --------------------------------------------------------------
+
+
+case_data_3 <- case_data %>%
+  mutate() %>%
+  pivot_longer(cols = c("Confirmed", "Discharged"), 
+               names_to = "type", 
+               values_to = "value")
+
+isolation_plot <- ggplot(data = case_data_3) +
+  geom_col(aes(x = Date, y = value, fill = type), width = 0.7, position = "stack") +
+  scale_fill_manual(values = c("Confirmed" = "firebrick1",
+                               "Discharged" = "steelblue3")) +
+  geom_line(aes(x = Date, y = Isolated, color = "Under isolation")) +
+  scale_x_date(breaks = brks, date_labels = "%b %d") +
+  scale_y_continuous(limits = c(0, 21000)) +
+  scale_color_manual(name = NULL, values = c("Under isolation" = "black")) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        plot.margin = unit(c(0,1,0,0.5), "cm"),
+        legend.position = c(0.2, 0.7),
+        legend.title = element_blank())
+
+
+# save ------------------------------------------------------------------------
+
+
+save_plot(SK_case_plot, "figures", "korea_case_data_simple", wdt = 23, hgt = 12)
+
+
+
 
 # SK_deaths_plot <- ggplot(data = case_data_2) +
 #   geom_col(aes(x = Date, y = Deceased_inc), width = 0.7, fill = "gray65") + 
@@ -104,5 +121,3 @@ SK_case_plot <- ggplot(data = case_data_2) +
 # g2 <- g + plot_layout(guides = "collect")
 # 
 # save_plot(g2, "figures", "korea_case_data_v3", wdt = 18, hgt = 16)
-
-save_plot(SK_case_plot, "figures", "korea_case_data_simple", wdt = 23, hgt = 12)
