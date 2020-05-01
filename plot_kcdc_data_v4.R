@@ -22,7 +22,7 @@ source(file.path("R", "plotting.R"))
 #                "2020-04-15",
 #                "2020-04-28")
 
-brks_labs <- seq(as.Date("2020-01-20"), as.Date("2020-04-28"), by = 3)
+brks_labs <- seq(as.Date("2020-01-02"), as.Date("2020-04-28"), by = 3)
 
 
 # load data -------------------------------------------------------------------
@@ -67,7 +67,7 @@ key_date <- data.frame(x = as.Date(c("2020-01-28", "2020-02-20", "2020-02-23", "
 
 SK_case_plot <- ggplot(data = case_data_2) +
   geom_col(aes(x = Date, y = Confirmed_inc), width = 0.7, fill = "gray65") + 
-  scale_x_date(breaks = brks, date_labels = "%e", expand = expansion(add = 1)) +
+  scale_x_date(limits = as.Date(c("2020-01-01", "2020-04-29")), breaks = brks, date_labels = "%e", expand = expansion(add = 1)) +
   scale_y_continuous(name = "Daily incidence",
                      breaks = prim_axis_brks,
                      labels = prim_axis_labels,
@@ -105,4 +105,4 @@ SK_case_plot <- ggplot(data = case_data_2) +
 # 
 # save_plot(g2, "figures", "korea_case_data_v3", wdt = 18, hgt = 16)
 
-save_plot(SK_case_plot, "figures", "korea_case_data_simple", wdt = 20, hgt = 12)
+save_plot(SK_case_plot, "figures", "korea_case_data_simple", wdt = 23, hgt = 12)
