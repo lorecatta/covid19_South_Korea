@@ -132,7 +132,7 @@ SK_total_plot <- ggplot(data = case_data_2) +
   geom_col(aes(x = Date, y = Total_inc), width = 0.7, fill = "gray65") + 
   geom_line(aes(x = Date, y = Total/25)) + 
   scale_x_date(breaks = brks, date_labels = "%b %d") +
-  scale_y_continuous(name = "Daily incidence", 
+  scale_y_continuous(name = "Daily number of tests", 
                      sec.axis = sec_axis(trans = ~.*25, 
                                          name = "Cumulative",
                                          breaks = sec_axis_brks,
