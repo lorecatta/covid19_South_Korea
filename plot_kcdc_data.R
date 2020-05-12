@@ -19,7 +19,8 @@ brks_labs <- c("2020-01-20",
                "2020-03-15", 
                "2020-04-01",
                "2020-04-15",
-               "2020-04-28")
+               "2020-04-30",
+               "2020-05-11")
 
 
 # load data -------------------------------------------------------------------
@@ -133,6 +134,7 @@ SK_total_plot <- ggplot(data = case_data_2) +
   geom_line(aes(x = Date, y = Total/25)) + 
   scale_x_date(breaks = brks, date_labels = "%b %d") +
   scale_y_continuous(name = "Daily number of tests", 
+                     breaks = seq(0, 25000, 5000),
                      sec.axis = sec_axis(trans = ~.*25, 
                                          name = "Cumulative",
                                          breaks = sec_axis_brks,
