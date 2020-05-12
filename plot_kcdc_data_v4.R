@@ -10,7 +10,19 @@ source(file.path("R", "plotting.R"))
 # define parameters -----------------------------------------------------------
 
 
-x_brks_1 <- seq(as.Date("2020-01-02"), as.Date("2020-04-28"), by = 3)
+x_brks_1 <- seq(as.Date("2020-01-02"), as.Date("2020-05-11"), by = 4)
+
+x_brks_labs <- c("2020-01-20", 
+                 "2020-02-01", 
+                 "2020-02-15", 
+                 "2020-03-01", 
+                 "2020-03-15", 
+                 "2020-04-01",
+                 "2020-04-15",
+                 "2020-04-30",
+                 "2020-05-11")
+
+label_x <- "2020-01-20"
 
 
 # load data -------------------------------------------------------------------
@@ -22,7 +34,7 @@ case_data <- readRDS(file.path("output", "KCDC_case_data.rds"))
 # pre processing --------------------------------------------------------------
 
 
-label_x <- "2020-01-20"
+x_axis_max_lim <- last(x_brks_1) + 3
 
 prim_axis_brks <- seq(0, 1000, 200)
 
@@ -32,15 +44,6 @@ prim_axis_labels <- vapply(prim_axis_brks,
                            FALSE)
 
 prim_axis_brks_2 <- seq(0, 10, 2)
-
-x_brks_labs <- c("2020-01-20", 
-                 "2020-02-01", 
-                 "2020-02-15", 
-                 "2020-03-01", 
-                 "2020-03-15", 
-                 "2020-04-01",
-                 "2020-04-15",
-                 "2020-04-28")
 
 x_brks_2 <- as.Date(x_brks_labs)
 
@@ -54,7 +57,7 @@ case_data_2 <- case_data %>%
 
 SK_case_plot <- ggplot(data = case_data_2) +
   geom_col(aes(x = Date, y = Confirmed_inc), width = 0.7, fill = "gray65") + 
-  scale_x_date(limits = as.Date(c("2020-01-01", "2020-04-29")), 
+  scale_x_date(limits = c(as.Date("2020-01-01"), x_axis_max_lim), 
                breaks = x_brks_1, 
                date_labels = "%e", 
                expand = expansion(add = 1)) +
@@ -64,15 +67,16 @@ SK_case_plot <- ggplot(data = case_data_2) +
                      limits = c(0, 1000),
                      expand = c(0, 0)) +
   theme_classic() +
-  theme(axis.text.x = element_text(angle = 0, hjust = 0.5),
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, size = 10),
         axis.title.x = element_blank(),
+        axis.text.y = element_text(size = 10),
         plot.margin = unit(c(0.5, 0.5, 0.5, 0.5), "cm")) +
   labs(tags = "A")
 
 SK_deaths_plot <- ggplot(data = case_data_2) +
   geom_col(aes(x = Date, y = Deceased_inc), width = 0.7, fill = "gray65") +
   #geom_line(aes(x = Date, y = Deceased)) +
-  scale_x_date(limits = as.Date(c("2020-01-01", "2020-04-29")),
+  scale_x_date(limits = c(as.Date("2020-01-01"), x_axis_max_lim),
                breaks = x_brks_1, 
                date_labels = "%e",
                expand = expansion(add = 1)) +
@@ -84,7 +88,9 @@ SK_deaths_plot <- ggplot(data = case_data_2) +
                      # sec.axis = sec_axis(trans = ~.*20,
                      #                     name = "Cumulative")) +
   theme_classic() +
-  theme(axis.title.x = element_blank(),
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, size = 10),
+        axis.title.x = element_blank(),
+        axis.text.y = element_text(size = 10),
         plot.margin = unit(c(0.5,1,0.1,0.5), "cm")) +
   labs(tags = "B")
  
@@ -115,8 +121,8 @@ isolation_plot <- ggplot(data = case_data_3) +
 # save ------------------------------------------------------------------------
 
 
-save_plot(SK_case_plot, "figures", "korea_case_data_simple", wdt = 23, hgt = 12)
+save_plot(SK_case_plot, "figures", "korea_case_data_simple", wdt = 18, hgt = 12)
 
 save_plot(isolation_plot, "figures", "korea_isolation_data_v3", wdt = 18, hgt = 7)
 
-save_plot(SK_deaths_plot, "figures", "korea_deaths_data_simple", wdt = 23, hgt = 8)
+save_plot(SK_deaths_plot, "figures", "korea_deaths_data_simple", wdt = 18, hgt = 8)
