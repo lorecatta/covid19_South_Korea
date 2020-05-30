@@ -3,7 +3,7 @@ library(pdftools)
 library(stringr)
 library(purrr)
 
-source(file.path("R", "pdf_extraction_functions.R"))
+source(file.path("R", "case_table.R"))
 source(file.path("R", "utility_functions.R"))
 
 
