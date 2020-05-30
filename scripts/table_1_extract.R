@@ -4,7 +4,7 @@ library(stringr)
 library(purrr)
 
 source(file.path("R", "case_table.R"))
-source(file.path("R", "utility_functions.R"))
+source(file.path("R", "utilities.R"))
 
 
 # define parameters -----------------------------------------------------------
