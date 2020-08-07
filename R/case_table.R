@@ -42,6 +42,9 @@ grab_table_1 <- function(test_1, index) {
   spl_2 <- str_split(test_3[2], "\\|")
   test_3[1] <- str_c(spl_1[[1]][1:end], collapse = "|")
   test_3[2] <- str_c(spl_2[[1]][1:end], collapse = "|")
+  
+  test_3 <- gsub("\\*","", test_3)
+  
   text_con <- textConnection(test_3)
 
   data_table <- read.csv(text_con, sep = "|", header = FALSE, stringsAsFactors = FALSE)
