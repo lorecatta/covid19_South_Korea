@@ -1,44 +1,58 @@
 
+library(pdftools)
+library(stringr)
 library(purrr)
-library(tabulizer)
 
-source(file.path("R", "pdf_extraction_functions.R"))
+source(file.path("R", "epi_links_table.R"))
+source(file.path("R", "utilities.R"))
 
 
 # define parameters -----------------------------------------------------------
 
 
-first_day <- "2020-04-02"
+dir_in <- file.path("data", "korea_archive")
 
-# oldest one on top
-urls <- c(
-  "http://is.cdc.go.kr/upload_comm/refile.do?cmd=fileDownloadC&comfile_se=TkVJW30lGikr6SgGl5JC/wvUxeSND83BpExsQIP||^||vdM=&comfile_fs=20200403175410867679028&comfile_fn=Press_Release_%28April3%29_Afternoon.pdf&comfile_c=www1&comfile_fd=1586188305590",
-  "http://is.cdc.go.kr/upload_comm/refile.do?cmd=fileDownloadC&comfile_se=||^||0zMHW||^||zfy3nyz7Lq7Sqs769t89CDlUUzX6FXk66Kyg=&comfile_fs=20200404175228484679250&comfile_fn=Press+Release+%28April4%29_afternoon.pdf&comfile_c=www1&comfile_fd=1586186166975",
-  "http://is.cdc.go.kr/upload_comm/refile.do?cmd=fileDownloadC&comfile_se=/5c0C96D8Bd/xHhZKAQWnx9kwptDRMBgp0||^||IFywdX/w=&comfile_fs=20200405173450804679345&comfile_fn=Press_Release_%28April5%29_Afternoon.pdf&comfile_c=www1&comfile_fd=1586187352362",
-  "http://is.cdc.go.kr/upload_comm/refile.do?cmd=fileDownloadC&comfile_se=UtBXAvY7Xi53DZ1QktH4rWjJ3FSvonjq3nXlJV3/yYQ=&comfile_fs=20200406201621499680011&comfile_fn=Press+Release+%28April6%29_Afternoon.pdf&comfile_c=www1&comfile_fd=1586187382458",
-  "http://is.cdc.go.kr/upload_comm/refile.do?cmd=fileDownloadC&comfile_se=6cQx||^||yeB/TIhRBMx7EjLbEeCAahquv65GZBpSB7vC6I=&comfile_fs=20200407173909186680622&comfile_fn=Press_Release_%28April7%29_Afternoon.pdf&comfile_c=www1&comfile_fd=1586254203260",
-  "http://is.cdc.go.kr/upload_comm/refile.do?cmd=fileDownloadC&comfile_se=A/HbJi2YnmRHoZ2loqbemUox8h0I||^||QrrSQJ73vKw7cQ=&comfile_fs=20200402201253222678586&comfile_fn=Press+Release+%28April2%29_Afternoon.pdf&comfile_c=www1&comfile_fd=1586290111590")
+last_day <- "2020-05-28"
 
 
-# test ------------------------------------------------------------------------
+# preprocess ------------------------------------------------------------------
 
 
-first_day_of_report <- as.Date(first_day) # 3 of April
+all_pdf_file_names <- list.files(file.path(dir_in))
 
-today_is <- Sys.Date()
+all_pdf_names <- gsub("\\..*", "", all_pdf_file_names)
 
-seq_dates <- seq(first_day_of_report, today_is, 1)
+all_pdf_dates <- as.Date(all_pdf_names)
 
-no_reports <- length(urls)
+all_paths <- list.files(file.path(dir_in), full.names = TRUE)
 
-dest_files <- paste0(seq_dates, ".pdf") 
 
-imap(urls, ~ download.file(url = .x, destfile = dest_files[.y], mode = "wb"))
+# -----------------------------------------------------------------------------
 
-# load pdfs into R
-my_pdfs <- map(dest_files, ~ extract_tables(file = .x))
 
-# extract four tables from each pdf 
-# unfortuntely this only works ATM for report in position 4 
-scrap_tables(my_pdfs[[5]])
+target_1_dates <- c(seq(as.Date("2020-03-25"), as.Date(last_day), 1))
 
+target_1_idx <- which(all_pdf_dates %in% target_1_dates)
+
+target_1 <- all_paths[target_1_idx]
+
+all_pdfs_1 <- imap(target_1, ~ pdf_text(pdf = .x))
+
+all_tables_1 <- imap(all_pdfs_1, ~ grab_table_epilinks(test_1 = .x, index = .y))
+
+grab_table_epilinks(all_pdfs_1[[59]], index = 59)
+
+
+
+# -----------------------------------------------------------------------------
+# post processing
+
+library(dplyr)
+
+final_output <- do.call("rbind", all_tables_1)
+
+dates_look_up <- data.frame(id = seq_len(length(target_1_dates)), target_1_dates)
+
+final_output_2 <- left_join(final_output, dates_look_up)
+
+write.csv(final_output_2, file.path("output", "epi_links.csv"), row.names = FALSE)
