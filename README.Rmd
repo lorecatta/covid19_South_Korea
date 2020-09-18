@@ -13,4 +13,4 @@ knitr::opts_chunk$set(
 
 # COVID-19_South_Korea
 
-Automate the extraction of the Korea CDC daily press releases 
+Automate the extraction of the Korea CDC daily press releases and data plotting

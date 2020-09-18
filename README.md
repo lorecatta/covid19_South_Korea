@@ -3,4 +3,4 @@
 COVID-19\_South\_Korea
 ======================
 
-Automate the extraction of the Korea CDC daily press releases
+Automate the extraction of the Korea CDC daily press releases and data plotting
