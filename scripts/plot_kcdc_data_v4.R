@@ -3,14 +3,16 @@ library(ggplot2)
 library(dplyr)
 library(patchwork)
 
-source(file.path("R", "utility_functions.R"))
+source(file.path("R", "utilities.R"))
 source(file.path("R", "plotting.R"))
 
 
 # define parameters -----------------------------------------------------------
 
 
-x_brks_1 <- seq(as.Date("2020-01-02"), as.Date("2020-05-11"), by = 4)
+last_day <- "2020-07-13"
+
+x_brks_1 <- seq(as.Date("2020-01-02"), as.Date(last_day), by = 8)
 
 x_brks_labs <- c("2020-01-20", 
                  "2020-02-01", 
@@ -20,7 +22,11 @@ x_brks_labs <- c("2020-01-20",
                  "2020-04-01",
                  "2020-04-15",
                  "2020-04-30",
-                 "2020-05-11")
+                 "2020-05-15",
+                 "2020-05-30",
+                 "2020-06-15",
+                 "2020-06-30",
+                 last_day)
 
 label_x <- "2020-01-20"
 
@@ -75,7 +81,6 @@ SK_case_plot <- ggplot(data = case_data_2) +
 
 SK_deaths_plot <- ggplot(data = case_data_2) +
   geom_col(aes(x = Date, y = Deceased_inc), width = 0.7, fill = "gray65") +
-  #geom_line(aes(x = Date, y = Deceased)) +
   scale_x_date(limits = c(as.Date("2020-01-01"), x_axis_max_lim),
                breaks = x_brks_1, 
                date_labels = "%e",
@@ -85,8 +90,6 @@ SK_deaths_plot <- ggplot(data = case_data_2) +
                      labels = prim_axis_brks_2,
                      limits = c(0, 10),
                      expand = c(0, 0)) +
-                     # sec.axis = sec_axis(trans = ~.*20,
-                     #                     name = "Cumulative")) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 0, hjust = 0.5, size = 10),
         axis.title.x = element_blank(),
@@ -94,19 +97,11 @@ SK_deaths_plot <- ggplot(data = case_data_2) +
         plot.margin = unit(c(0.5,1,0.1,0.5), "cm")) +
   labs(tags = "B")
  
-g <- SK_case_plot / SK_deaths_plot
-
 
 # isolation plot --------------------------------------------------------------
 
 
-case_data_3 <- case_data %>%
-  mutate(Isolation_cum = cumsum(Isolated)) %>%
-  mutate(Isolation_inc = Isolation_cum - lag(Isolation_cum, default = first(Isolation_cum))) %>%
-  mutate(Confirmed_bw_inc = Confirmed - lag(Confirmed, default = first(Confirmed))) %>%
-  mutate(Isolation_per_case = ifelse(Confirmed_bw_inc == 0, 0, Isolation_inc / Confirmed_bw_inc)) 
-
-isolation_plot <- ggplot(data = case_data_3) +
+isolation_plot <- ggplot(data = case_data) +
   geom_line(aes(x = Date, y = Isolated)) +
   scale_x_date(breaks = x_brks_2, date_labels = "%b %d") +
   scale_y_continuous(name = "Cases currently under isolation",
